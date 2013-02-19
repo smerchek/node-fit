@@ -1,0 +1,19 @@
+{
+  "name": "node-fit",
+  "version": "0.0.0",
+  "description": "Parse Ant FIT files.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "parser",
+    "fit"
+  ],
+  "author": "Scott Smerchek",
+  "license": "MIT",
+  "dependencies": {
+    "bindings": "~1.0.0"
+  }
+}
