@@ -76,7 +76,7 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
       return scope.Close(Undefined());
    }
 
-   mesgBroadcaster.AddListener((fit::MesgListener &)listener);
+   mesgBroadcaster.AddListener((fit::MesgListener &)*listener);
 
    try
    {
