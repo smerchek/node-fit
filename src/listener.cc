@@ -11,6 +11,20 @@
 
 using namespace std;
 
+// Convert a wide string to a V8 string.
+static v8::Handle<v8::String> GetV8String(const std::wstring& str)
+{
+  return v8::String::New(
+      reinterpret_cast<const uint16_t*>(str.c_str()), str.length());
+}
+
+// Convert a string to a V8 string.
+static v8::Handle<v8::String> GetV8String(const std::string& str)
+{
+  return v8::String::New(
+      reinterpret_cast<const uint16_t*>(str.c_str()), str.length());
+}
+
 Listener::Listener (const Arguments& args) {
    self = args.This();
 }
@@ -32,10 +46,14 @@ void Listener::OnMesg(fit::Mesg& mesg) {
 
       //std::wcout << "   Value : " << value << std::endl;
       //std::cout << "   Units : " << (*field).GetUnits(subFieldIndex) << std::endl;
-
+      std::string units = (*field).GetUnits(subFieldIndex);
+      Local<Object> obj = Object::New();
+      obj->Set(String::NewSymbol("type"), String::New(mesg.GetName().c_str()));
+      obj->Set(String::NewSymbol("value"), GetV8String(value));
+      obj->Set(String::NewSymbol("units"), String::New(units.c_str()));
       Handle<Value> argv[2] = {
          String::New("message"), // event name
-         String::New(mesg.GetName().c_str())  // argument
+         obj  // argument
       };
 
       MakeCallback(self, "emit", 2, argv);
