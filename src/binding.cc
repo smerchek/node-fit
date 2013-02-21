@@ -12,46 +12,28 @@
 using namespace std;
 using namespace v8;
 
-class Listener : public fit::FileIdMesgListener, public fit::UserProfileMesgListener, public fit::ActivityMesgListener
+class Listener : public fit::MesgListener
 {
    public :
-      void OnMesg(fit::FileIdMesg& mesg)
+      void OnMesg(fit::Mesg& mesg)
       {
-         printf("File ID:\n");
-         if (mesg.GetType() != FIT_FILE_INVALID)
-            printf("   Type: %d\n", mesg.GetType());
-         if (mesg.GetManufacturer() != FIT_MANUFACTURER_INVALID)
-            printf("   Manufacturer: %d\n", mesg.GetManufacturer());
-         if (mesg.GetProduct() != FIT_UINT16_INVALID)
-            printf("   Product: %d\n", mesg.GetProduct());
-         if (mesg.GetSerialNumber() != FIT_UINT32Z_INVALID)
-            printf("   Serial Number: %d\n", mesg.GetSerialNumber());
-         if (mesg.GetNumber() != FIT_UINT16_INVALID)
-            printf("   Number: %d\n", mesg.GetNumber());
-      }
+         printf("Message [%s]:\n", mesg.GetName());
+         for (int i = 0; i < mesg.GetNumFields(); i++) {
+            fit::Field* field = mesg.GetFieldByIndex(i);
+            int subFieldIndex = mesg.GetActiveSubFieldIndex((*field).GetNum());
+            std::cout << "   Name : " << (*field).GetName(subFieldIndex) << std::endl;
+            std::wstring value = (*field).GetSTRINGValue(0, subFieldIndex);
 
-      void OnMesg(fit::UserProfileMesg& mesg)
-      {
-         printf("UserProfileMesg:\n");
-         if (mesg.GetFriendlyName() != FIT_WSTRING_INVALID)
-            std::wcout << L"   Friendly Name: " << mesg.GetFriendlyName().c_str() << L"\n";
-         if (mesg.GetGender() == FIT_GENDER_MALE)
-            printf("   Gender: Male\n");
-         if (mesg.GetGender() == FIT_GENDER_FEMALE)
-            printf("   Gender: Female\n");
-         if (mesg.GetAge() != FIT_UINT8_INVALID)
-            printf("   Age [years]: %d\n", mesg.GetAge());
-         if (mesg.GetWeight() != FIT_FLOAT32_INVALID)
-            printf("   Weight [kg]: %0.2f\n", mesg.GetWeight());
-      }
+            for (int fieldElement = 1; fieldElement < (*field).GetNumValues(); fieldElement++) {
+               value += L"|";
 
-      void OnMesg(fit::ActivityMesg& mesg)
-      {
-         printf("Activity:\n");
-         if (mesg.GetEvent() != FIT_EVENT_INVALID)
-            printf("   Event: %d\n", mesg.GetEvent());
-         if (mesg.GetTotalTimerTime() != FIT_FLOAT32_INVALID)
-            printf("   Total Timer Time: %f\n");
+               std::wstring nextValue = (*field).GetSTRINGValue(fieldElement, subFieldIndex);
+               value += nextValue;
+            }
+
+            std::wcout << "   Value : " << value << std::endl;
+            std::cout << "   Units : " << (*field).GetUnits(subFieldIndex) << std::endl;
+         }
       }
 };
 
@@ -87,9 +69,7 @@ Handle<Value> Decode(const Arguments& args) {
       return scope.Close(Undefined());
    }
 
-   mesgBroadcaster.AddListener((fit::FileIdMesgListener &)listener);
-   mesgBroadcaster.AddListener((fit::UserProfileMesgListener &)listener);
-   mesgBroadcaster.AddListener((fit::ActivityMesgListener &)listener);
+   mesgBroadcaster.AddListener((fit::MesgListener &)listener);
 
    try
    {
