@@ -4,6 +4,8 @@
       "target_name": "binding",
       "sources": [ 
          "src/binding.cc",
+         "src/listener.cc",
+         "src/fitparser.cc",
          "libfit/fit.cpp",
          "libfit/fit_accumulated_field.cpp",
          "libfit/fit_accumulator.cpp",
