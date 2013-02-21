@@ -61,7 +61,6 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
 
    String::Utf8Value fileName(args[0]->ToString());
    
-   printf("Decoding %s!\n", *fileName);
    file.open(strdup(*fileName), std::ios::in | std::ios::binary);
 
    if (!file.is_open())
@@ -80,7 +79,6 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
 
    try
    {
-      printf("Running %s!\n", *fileName);
       mesgBroadcaster.Run(file);
    }
    catch (const fit::RuntimeException& e)
@@ -89,7 +87,6 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
       return scope.Close(Undefined());
    }
 
-   printf("End!\n");
    Handle<Value> argv[2] = {
     String::New("end"), // event name
     args[0]->ToString()  // argument

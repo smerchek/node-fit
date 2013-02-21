@@ -16,11 +16,11 @@ Listener::Listener (const Arguments& args) {
 }
 
 void Listener::OnMesg(fit::Mesg& mesg) {
-   printf("Message [%s]:\n", mesg.GetName());
+   //printf("Message [%s]:\n", mesg.GetName());
    for (int i = 0; i < mesg.GetNumFields(); i++) {
       fit::Field* field = mesg.GetFieldByIndex(i);
       int subFieldIndex = mesg.GetActiveSubFieldIndex((*field).GetNum());
-      std::cout << "   Name : " << (*field).GetName(subFieldIndex) << std::endl;
+      //std::cout << "   Name : " << (*field).GetName(subFieldIndex) << std::endl;
       std::wstring value = (*field).GetSTRINGValue(0, subFieldIndex);
 
       for (int fieldElement = 1; fieldElement < (*field).GetNumValues(); fieldElement++) {
@@ -30,8 +30,8 @@ void Listener::OnMesg(fit::Mesg& mesg) {
          value += nextValue;
       }
 
-      std::wcout << "   Value : " << value << std::endl;
-      std::cout << "   Units : " << (*field).GetUnits(subFieldIndex) << std::endl;
+      //std::wcout << "   Value : " << value << std::endl;
+      //std::cout << "   Units : " << (*field).GetUnits(subFieldIndex) << std::endl;
 
       Handle<Value> argv[2] = {
          String::New("message"), // event name
