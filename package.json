@@ -4,7 +4,7 @@
   "description": "Parse Ant FIT files.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test.js"
+    "test": "mocha --recursive --reporter spec"
   },
   "repository": "",
   "keywords": [
@@ -15,5 +15,9 @@
   "license": "MIT",
   "dependencies": {
     "bindings": "~1.0.0"
+  },
+  "devDependecies": {
+    "mocha": "~1.8.1",
+    "should": "~1.2.2"
   }
 }

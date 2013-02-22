@@ -38,7 +38,6 @@ Handle<Value> FitParser::New(const Arguments& args) {
    FitParser* self = new FitParser();
    self->Wrap(args.This());
 
-   printf("New FitParser!\n");
    return args.This();
 }
 
@@ -50,12 +49,22 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
    std::fstream file;
 
    if (args.Length() < 1) {
-      ThrowException(Exception::TypeError(String::New("Wrong number of arguments")));
+      Handle<Value> argv[2] = {
+       String::New("error"), // event name
+       Exception::TypeError(String::New("Wrong number of arguments"))  // argument
+      };
+
+      MakeCallback(args.This(), "emit", 2, argv);
       return scope.Close(Undefined());
    }
 
    if (!args[0]->IsString()) {
-      ThrowException(Exception::TypeError(String::New("Wrong arguments")));
+      Handle<Value> argv[2] = {
+       String::New("error"), // event name
+       Exception::TypeError(String::New("Argument must be a string."))  // argument
+      };
+
+      MakeCallback(args.This(), "emit", 2, argv);
       return scope.Close(Undefined());
    }
 
@@ -65,13 +74,23 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
 
    if (!file.is_open())
    {
-      ThrowException(Exception::TypeError(String::New("Error opening file.")));
+      Handle<Value> argv[2] = {
+       String::New("error"), // event name
+       Exception::TypeError(String::New("Error opening file."))  // argument
+      };
+
+      MakeCallback(args.This(), "emit", 2, argv);
       return scope.Close(Undefined());
    }
 
    if (!decode.CheckIntegrity(file))
    {
-      ThrowException(Exception::TypeError(String::New("FIT file integrity failed.")));
+      Handle<Value> argv[2] = {
+       String::New("error"), // event name
+       Exception::TypeError(String::New("FIT file integrity failed."))  // argument
+      };
+
+      MakeCallback(args.This(), "emit", 2, argv);
       return scope.Close(Undefined());
    }
 
@@ -83,7 +102,12 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
    }
    catch (const fit::RuntimeException& e)
    {
-      ThrowException(Exception::TypeError(String::New("Exception while decoding file.")));
+      Handle<Value> argv[2] = {
+       String::New("error"), // event name
+       Exception::TypeError(String::New("Exception while decoding file."))  // argument
+      };
+
+      MakeCallback(args.This(), "emit", 2, argv);
       return scope.Close(Undefined());
    }
 
