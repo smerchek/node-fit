@@ -1,5 +1,6 @@
 node-fit
 ========
+[![Build Status](https://travis-ci.org/smerchek/node-fit.png)](https://travis-ci.org/smerchek/node-fit)
 
 Garmin FIT file parser for nodejs.
 
