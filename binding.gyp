@@ -20,8 +20,9 @@
          "libfit/fit_mesg_with_event_broadcaster.cpp",
          "libfit/fit_profile.cpp",
          "libfit/fit_unicode.cpp",
-
-      ]
+      ],
+      "cflags!": [ "-fno-exceptions" ],
+      "cflags_cc!": [ "-fno-exceptions" ],
     }
   ]
 }

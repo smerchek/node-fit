@@ -16,7 +16,7 @@
   "dependencies": {
     "bindings": "~1.0.0"
   },
-  "devDependecies": {
+  "devDependencies": {
     "mocha": "~1.8.1",
     "should": "~1.2.2"
   }
