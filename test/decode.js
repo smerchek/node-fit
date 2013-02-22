@@ -1,7 +1,7 @@
 require("mocha");
 var should = require('should');
 var path = require('path');
-var FitParser = require('../src/fitparser').FitParser;
+var FitParser = require('../lib/fitparser').FitParser;
 
 describe("decode()", function() {
    describe("#Exceptions", function() {

@@ -1,0 +1,1 @@
+exports.FitParser = require('./lib/fitparser').FitParser;
