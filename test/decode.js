@@ -1,5 +1,6 @@
 require("mocha");
 var should = require('should');
+var sinon = require('sinon');
 var path = require('path');
 var FitParser = require('../lib/fitparser').FitParser;
 
@@ -55,13 +56,34 @@ describe("decode()", function() {
 
       it("should emit messages", function() {
          var fitParser = new FitParser();
+         var onMessage = sinon.spy();
          fitParser.on('message', function(msg) {
             msg.should.have.property('type');
             msg.should.have.property('value');
             msg.should.have.property('units');
+            onMessage();
          });
          var fileName = path.resolve('test-files/Activity.fit');
          fitParser.decode(fileName);
+         onMessage.callCount.should.be.above(0);
+      });
+
+      it("should emit record messages", function() {
+         var fitParser = new FitParser();
+         var onRecord = sinon.spy();
+         fitParser.on('record', function(msg) {
+            msg.should.have.property('timestamp');
+            msg.should.have.property('position_lat');
+            msg.should.have.property('position_long');
+            msg.should.have.property('altitude');
+            msg.should.have.property('distance');
+            msg.should.have.property('speed');
+            msg.should.not.have.property('heart_rate');
+            onRecord();
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
+         //onRecord.callCount.should.equal(14);
       });
    });
 });

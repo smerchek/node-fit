@@ -29,6 +29,49 @@ Listener::Listener (const Arguments& args) {
    self = args.This();
 }
 
+
+void Listener::OnMesg(fit::RecordMesg& mesg)
+{
+   Local<Object> obj = Object::New();
+   if (mesg.GetHeartRate() != FIT_DATE_TIME_INVALID)
+      obj->Set(String::NewSymbol("timestamp"), Uint32::New(mesg.GetTimestamp())); // seconds since UTC 00:00 Dec 31 1989
+   if (mesg.GetPositionLat() != FIT_SINT32_INVALID)
+      obj->Set(String::NewSymbol("position_lat"), Int32::New(mesg.GetPositionLat()));
+   if (mesg.GetPositionLong() != FIT_SINT32_INVALID)
+      obj->Set(String::NewSymbol("position_long"), Int32::New(mesg.GetPositionLong()));
+   if (mesg.GetAltitude() != FIT_FLOAT32_INVALID)
+      obj->Set(String::NewSymbol("altitude"),  NumberObject::New(mesg.GetAltitude()));
+   if (mesg.GetHeartRate() != FIT_UINT8_INVALID)
+      obj->Set(String::NewSymbol("heart_rate"), Int32::New(mesg.GetHeartRate()));
+   // obj->Set(String::NewSymbol("cadence"), mesg.GetCadence());
+   if (mesg.GetDistance() != FIT_FLOAT32_INVALID)
+      obj->Set(String::NewSymbol("distance"), NumberObject::New(mesg.GetDistance()));
+   if (mesg.GetSpeed() != FIT_FLOAT32_INVALID)
+      obj->Set(String::NewSymbol("speed"), NumberObject::New(mesg.GetSpeed()));
+   // obj->Set(String::NewSymbol("power"), mesg.GetPower());
+   // obj->Set(String::NewSymbol("compressed_speed_distance"), mesg.GetNumCompressedSpeedDistance());
+   // obj->Set(String::NewSymbol("grade"), mesg.GetGrade());
+   // obj->Set(String::NewSymbol("resistance"), mesg.GetResistance());
+   // obj->Set(String::NewSymbol("time_from_course"), mesg.GetTimeFromCourse());
+   // obj->Set(String::NewSymbol("cycle_length"), mesg.GetCycleLength());
+   // obj->Set(String::NewSymbol("temperature"), mesg.GetTemperature());
+   // obj->Set(String::NewSymbol("speed_1s"), mesg.GetNumSpeed1s());
+   // obj->Set(String::NewSymbol("cycles"), mesg.GetCycles());
+   // obj->Set(String::NewSymbol("total_cycles"), mesg.GetTotalCycles());
+   // obj->Set(String::NewSymbol("compressed_accumulated_power"), mesg.GetCompressedAccumulatedPower());
+   // obj->Set(String::NewSymbol("accumulated_power"), mesg.GetAccumulatedPower());
+   // obj->Set(String::NewSymbol("left_right_balance"), mesg.GetLeftRightBalance());
+   // obj->Set(String::NewSymbol("gps_accuracy"), mesg.GetGpsAccuracy());
+   // obj->Set(String::NewSymbol("vertical_speed"), mesg.GetVerticalSpeed());
+   // obj->Set(String::NewSymbol("calories"), mesg.GetCalories());
+   Handle<Value> argv[2] = {
+      String::New("record"), // event name
+      obj  // argument
+   };
+
+   MakeCallback(self, "emit", 2, argv);
+}
+
 void Listener::OnMesg(fit::Mesg& mesg) {
    //printf("Message [%s]:\n", mesg.GetName());
    for (int i = 0; i < mesg.GetNumFields(); i++) {

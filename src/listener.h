@@ -9,10 +9,13 @@
 using namespace v8;
 using namespace node;
 
-class Listener : public fit::MesgListener {
+class Listener : 
+	public fit::MesgListener, 
+	public fit::RecordMesgListener {
    public:
       Listener (const Arguments& args);
       void OnMesg(fit::Mesg& mesg);
+      void OnMesg(fit::RecordMesg& mesg);
 
    private:
       Local<Object> self;

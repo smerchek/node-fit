@@ -95,6 +95,7 @@ Handle<Value> FitParser::Decode(const Arguments& args) {
    }
 
    mesgBroadcaster.AddListener((fit::MesgListener &)*listener);
+   mesgBroadcaster.AddListener((fit::RecordMesgListener &)*listener);
 
    try
    {
