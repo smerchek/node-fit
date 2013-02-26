@@ -25,6 +25,15 @@ static v8::Handle<v8::String> GetV8String(const std::string& str)
       reinterpret_cast<const uint16_t*>(str.c_str()), str.length());
 }
 
+// Convert a FIT DATE TIME to a V8 Date.
+// FIT date time is seconds since UTC 00:00 Dec 31 1989
+// v8 date time is milliseconds since UTC 00:00 Jan 1 1970
+static double GetMillisecondsSinceEpoch(const uint32_t seconds)
+{
+   const uint32_t secondsSinceEpoch = 631065600;
+   return (static_cast<double>(seconds) + secondsSinceEpoch)*1000;
+}
+
 Listener::Listener (const Arguments& args) {
    self = args.This();
 }
@@ -34,7 +43,7 @@ void Listener::OnMesg(fit::RecordMesg& mesg)
 {
    Local<Object> obj = Object::New();
    if (mesg.GetHeartRate() != FIT_DATE_TIME_INVALID)
-      obj->Set(String::NewSymbol("timestamp"), Uint32::New(mesg.GetTimestamp())); // seconds since UTC 00:00 Dec 31 1989
+      obj->Set(String::NewSymbol("timestamp"), Date::New(GetMillisecondsSinceEpoch(mesg.GetTimestamp()))); 
    if (mesg.GetPositionLat() != FIT_SINT32_INVALID)
       obj->Set(String::NewSymbol("position_lat"), Int32::New(mesg.GetPositionLat()));
    if (mesg.GetPositionLong() != FIT_SINT32_INVALID)

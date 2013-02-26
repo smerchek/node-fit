@@ -85,6 +85,18 @@ describe("decode()", function() {
          fitParser.decode(fileName);
          //onRecord.callCount.should.equal(14);
       });
+
+      it("record timestamp should be a DateTime", function() {
+         var fitParser = new FitParser();
+         var onRecord = sinon.spy();
+         fitParser.on('record', function(msg) {
+            msg.timestamp.should.be.an.instanceof(Date);
+            msg.timestamp.should.be.within(new Date('Mon Apr 09 2012 16:22:26 GMT-0500'), new Date('Mon Apr 09 2012 16:22:39 GMT-0500'))
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
+         //onRecord.callCount.should.equal(14);
+      });
    });
 });
 
