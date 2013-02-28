@@ -314,7 +314,13 @@ FIT_UINT32 Field::GetUINT32Value(const FIT_UINT8 fieldArrayIndex, const FIT_UINT
    if ((fieldArrayIndex >= values.size()) || (values[fieldArrayIndex].size() < sizeof(FIT_UINT32)))
       return FIT_UINT32_INVALID;
 
-   return ((FIT_UINT32) values[fieldArrayIndex][3] << 24) | ((FIT_UINT32) values[fieldArrayIndex][2] << 16) | ((FIT_UINT32) values[fieldArrayIndex][1] << 8) | values[fieldArrayIndex][0];
+   if (fit::GetArch()) {
+      //Big Endian
+      return ((FIT_UINT32) values[fieldArrayIndex][3] << 24) | ((FIT_UINT32) values[fieldArrayIndex][2] << 16) | ((FIT_UINT32) values[fieldArrayIndex][1] << 8) | values[fieldArrayIndex][0];
+   }
+   else {
+      return ((FIT_UINT32) values[fieldArrayIndex][0] << 24) | ((FIT_UINT32) values[fieldArrayIndex][1] << 16) | ((FIT_UINT32) values[fieldArrayIndex][2] << 8) | values[fieldArrayIndex][3];
+   }
 }
 
 FIT_UINT32Z Field::GetUINT32ZValue(const FIT_UINT8 fieldArrayIndex, const FIT_UINT16 subFieldIndex) const
