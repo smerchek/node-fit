@@ -97,6 +97,17 @@ describe("decode()", function() {
          fitParser.decode(fileName);
          //onRecord.callCount.should.equal(14);
       });
+
+      it("record position_lat should be a number", function() {
+         var fitParser = new FitParser();
+         var onRecord = sinon.spy();
+         fitParser.on('record', function(msg) {
+            msg.position_lat.should.be.within(495280402, 495280588);
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
+         //onRecord.callCount.should.equal(14);
+      });
    });
 });
 
