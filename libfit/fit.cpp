@@ -14,7 +14,6 @@
 // Tag = $Name: AKW6_000 $
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include "fit.hpp"
 
 ///////////////////////////////////////////////////////////////////////
@@ -88,6 +87,17 @@ FIT_UINT8 GetArch(void)
 {
    const FIT_UINT16 arch = 0x0100;
    return (*(FIT_UINT8 *)&arch);
+}
+
+FIT_UINT8 GetOS(void) 
+{
+   #ifdef _WIN64
+      return 0;
+   #elif _WIN32
+      return 0;
+   #else
+      return 1;
+   #endif
 }
 
 } // namespace fit

@@ -100,13 +100,38 @@ describe("decode()", function() {
 
       it("record position_lat should be a number", function() {
          var fitParser = new FitParser();
-         var onRecord = sinon.spy();
          fitParser.on('record', function(msg) {
             msg.position_lat.should.be.within(495280402, 495280588);
          });
          var fileName = path.resolve('test-files/Activity.fit');
          fitParser.decode(fileName);
-         //onRecord.callCount.should.equal(14);
+      });
+
+      it("record position_long should be a number", function() {
+         var fitParser = new FitParser();
+         fitParser.on('record', function(msg) {
+            msg.position_long.should.be.within(-872697257, -872696680);
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
+      });
+
+      it("record distance should be a float", function() {
+         var fitParser = new FitParser();
+         fitParser.on('record', function(msg) {
+            msg.distance.should.be.within(0.01, 5.74);
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
+      });
+
+      it("record speed should be a float", function() {
+         var fitParser = new FitParser();
+         fitParser.on('record', function(msg) {
+            msg.speed.should.be.within(0, 0.369);
+         });
+         var fileName = path.resolve('test-files/Activity.fit');
+         fitParser.decode(fileName);
       });
    });
 });

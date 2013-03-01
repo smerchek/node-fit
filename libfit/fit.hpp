@@ -288,6 +288,7 @@ FIT_UINT8 GetArch(void);
 // See FIT_MESG_DEF->arch and FIT_ARCH_*.
 ///////////////////////////////////////////////////////////////////////
 
-} // namespace fit
+FIT_UINT8 GetOS(void);
+} 
 
 #endif // !defined(FIT_HPP)
